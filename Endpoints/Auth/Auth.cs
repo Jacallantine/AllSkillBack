@@ -75,8 +75,8 @@ public static class AuthRoutes
                             response.Cookies.Append("token", tokenString, new CookieOptions
                             {
                                 HttpOnly = true,
-                                Secure = false, 
-                                SameSite = SameSiteMode.Lax,
+                                Secure = true, 
+                                SameSite = SameSiteMode.None,
                                 Expires = DateTime.UtcNow.AddHours(1)
                             });
 
@@ -130,8 +130,8 @@ public static class AuthRoutes
                             response.Cookies.Append("token", tokenString, new CookieOptions
                             {
                                 HttpOnly = true,
-                                Secure = false,               // Set to true in production (requires HTTPS)
-                                SameSite = SameSiteMode.Lax,
+                                Secure = true,               // Set to true in production (requires HTTPS)
+                                SameSite = SameSiteMode.None,
                                 Expires = DateTime.UtcNow.AddHours(1),
                                 Path = "/"
                             });
