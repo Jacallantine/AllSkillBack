@@ -1,0 +1,37 @@
+# Ignore build outputs
+bin/
+obj/
+
+# Visual Studio specific files
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Dotnet tools & logs
+*.dotnet/
+*.log
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Docker files (optional if you don't want to copy them)
+Dockerfile
+.dockerignore
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Git files/folders
+.git
+.gitignore
+
+# Database files (if any)
+*.mdf
+*.ldf
+*.sqlite
+*.db
