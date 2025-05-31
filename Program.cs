@@ -75,7 +75,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("https://all-skill.vercel.app" ) 
+        policy.WithOrigins("https://allskillnotalk.site" ) 
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials(); 
