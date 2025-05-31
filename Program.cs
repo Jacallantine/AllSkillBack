@@ -75,7 +75,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://68.62.246.66:3000", "http://localhost:3000","http://26.111.161.181:3000", "https://all-skill.vercel.app/" ) 
+        policy.WithOrigins("http://68.62.246.66:3000", "http://localhost:3000","http://26.111.161.181:3000", "https://all-skill.vercel.app" ) 
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials(); 
