@@ -76,7 +76,7 @@ public static class AuthRoutes
                             {
                                 HttpOnly = true,
                                 Secure = true, 
-                                SameSite = None,
+                                SameSite = SameSiteMode.None,
                                 Expires = DateTime.UtcNow.AddHours(1)
                             });
 
@@ -131,7 +131,7 @@ public static class AuthRoutes
                             {
                                 HttpOnly = true,
                                 Secure = true,               // Set to true in production (requires HTTPS)
-                                SameSite = None,
+                                SameSite = SameSiteMode.None,
                                 Expires = DateTime.UtcNow.AddHours(1),
                                 Path = "/"
                             });
