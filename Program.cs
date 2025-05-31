@@ -75,7 +75,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("https://allskillnotalk.site" ) 
+        policy.WithOrigins("https://www.allskillnotalk.site" ) 
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials(); 
