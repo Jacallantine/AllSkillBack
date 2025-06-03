@@ -148,3 +148,4 @@ C:\Users\jared\Documents\Nextjs\AllSkillFront\allSkillBack\bin\Debug\net8.0\Goog
 C:\Users\jared\Documents\Nextjs\AllSkillFront\allSkillBack\bin\Debug\net8.0\Newtonsoft.Json.dll
 C:\Users\jared\Documents\Nextjs\AllSkillFront\allSkillBack\bin\Debug\net8.0\System.Management.dll
 C:\Users\jared\Documents\Nextjs\AllSkillFront\allSkillBack\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Management.dll
+C:\Users\jared\Documents\Nextjs\AllSkillFront\allSkillBack\obj\Debug\net8.0\allSkillBack.sourcelink.json

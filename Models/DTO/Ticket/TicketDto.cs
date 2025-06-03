@@ -2,7 +2,7 @@ namespace Api.Models.Dto{
 
      public class TicketDto
     {
-        public Guid Id {get; set;}
+        public Guid Id {get; set;} = Guid.NewGuid();
         public string Email { get; set; }
         public DateTimeOffset Time { get; set; } = DateTimeOffset.UtcNow;
         public string Social { get; set; }

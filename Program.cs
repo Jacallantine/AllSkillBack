@@ -324,6 +324,50 @@ app.MapPost("/tickets/create", async (TicketDto ticketDto, AppDbContext db) =>
     
 });
 
+app.MapPost("/admin/tickets/create", [Authorize(Roles = "admin")] async (TicketDto ticketDto, AppDbContext db) =>
+{
+     PC? pc = null;
+
+    if (ticketDto.PC is not null)
+    {
+        pc = new PC
+        {
+            CpuId = ticketDto.PC.CpuId,
+            GpuId = ticketDto.PC.GpuId,
+            RamId = ticketDto.PC.RamId,
+            MoboId = ticketDto.PC.MoboId,
+            PsuId = ticketDto.PC.PsuId,
+            CaseId = ticketDto.PC.CaseId,
+            StorageId = ticketDto.PC.StorageId
+        };
+
+        db.PCs.Add(pc);
+        await db.SaveChangesAsync();
+    }
+      var ticket = new Ticket 
+    {
+        Id= ticketDto.Id,
+        Email = ticketDto.Email,
+        Time = ticketDto.Time,
+        Social = ticketDto.Social,
+        IsComplete = 0,
+        IsClaimed = 0,
+        WhoClaimed = ticketDto.WhoClaimed,
+        PCId = pc?.Id,
+        InternetId = ticketDto.InternetId,
+        PcOptiId = ticketDto.PcOptiId
+    };
+
+    
+
+    db.Tickets.Add(ticket);
+    
+    await db.SaveChangesAsync();
+
+    return Results.Ok("Order Placed!");
+    
+});
+
 
 
 

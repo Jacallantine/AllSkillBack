@@ -74,7 +74,7 @@ public static class AuthRoutes
 
                             response.Cookies.Append("token", tokenString, new CookieOptions
                             {
-                                Domain = ".allskillnotalk.site",
+                                // Domain = ".allskillnotalk.site",
                                 HttpOnly = true,
                                 Secure = true, 
                                 SameSite = SameSiteMode.None,
@@ -130,7 +130,7 @@ public static class AuthRoutes
 
                             response.Cookies.Append("token", tokenString, new CookieOptions
                             {
-                                Domain = ".allskillnotalk.site",
+                                // Domain = ".allskillnotalk.site",
                                 HttpOnly = true,
                                 Secure = true,               // Set to true in production (requires HTTPS)
                                 SameSite = SameSiteMode.None,
