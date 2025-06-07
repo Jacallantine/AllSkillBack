@@ -23,13 +23,24 @@ public class AppDbContext : DbContext
     public DbSet<Gpu> Gpu {get; set;}
     public DbSet<Storage> Storage {get; set;}
     public DbSet<Psu> Psu {get; set;}
+    public DbSet<Internet> Internet {get; set;}
+    public DbSet<PcOpti> PcOpti {get; set;}
+    public DbSet<PcBudget> PcBudget {get;set;}
 
 protected override void OnModelCreating(ModelBuilder modelBuilder)
 {
-    modelBuilder.Entity<Ticket>()
+modelBuilder.Entity<Ticket>()
     .HasOne(t => t.PC)
-    .WithMany()
-    .HasForeignKey(t => t.PCId);
+    .WithOne() 
+    .HasForeignKey<Ticket>(t => t.PCId)
+    .OnDelete(DeleteBehavior.SetNull); 
+
+modelBuilder.Entity<Ticket>()
+    .HasOne(t => t.PcBudget)
+    .WithOne()
+    .HasForeignKey<Ticket>(t => t.PcBudgetId)
+    .OnDelete(DeleteBehavior.SetNull);
+
 
     modelBuilder.Entity<Ticket>()
         .HasOne(t => t.Internet)

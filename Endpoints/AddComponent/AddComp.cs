@@ -57,24 +57,6 @@ public static class AddCompRoutes
 
 
 
-            app.MapPost("/addgpu", [Authorize(Roles = "admin")] async (AddMoboDto moboDto, AppDbContext db)=>{
-
-                        var newMobo = new Mobo 
-                        {
-                                Id = moboDto.Id,
-                                Price = moboDto.Price,
-                                Name = moboDto.Name,
-                                Url = moboDto.Url,
-                                Type = moboDto.Type
-                        };
-
-                    db.Mobo.Add(newMobo);
-                    await db.SaveChangesAsync();
-                    return Results.Ok(newMobo);
-
-            });
-
-
 
              app.MapPost("/addcase", [Authorize(Roles = "admin")] async (AddCaseDto caseDto, AppDbContext db)=>{
 

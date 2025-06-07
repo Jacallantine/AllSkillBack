@@ -9,10 +9,14 @@ namespace Api.Models.Dto{
         public int IsComplete { get; set; } = 0;
         public int IsClaimed { get; set; } = 0;
         public string WhoClaimed { get; set; } = string.Empty;
+        public Guid WhoClaimedId {get; set;}
+
+        public PcBudgetDto? PcBudget {get;set;}
+        public Guid? PcBudgetId {get;set;}
 
         public Guid? InternetId { get; set; }
         public Guid? PcOptiId { get; set; }
-        public Guid? PCId {get; set;} = Guid.NewGuid();
+        public Guid? PCId {get; set;} 
         public PcDto? PC { get; set; } 
     }
 

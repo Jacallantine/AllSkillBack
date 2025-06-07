@@ -3,6 +3,7 @@ using System;
 using Database.AppDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace allSkillBack.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250605001446_test246")]
+    partial class test246
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -205,28 +208,6 @@ namespace allSkillBack.Migrations
                     b.ToTable("PCs");
                 });
 
-            modelBuilder.Entity("Api.Models.PcBudget", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Budget")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Social")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("SpecialRequest")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PcBudget");
-                });
-
             modelBuilder.Entity("Api.Models.PcOpti", b =>
                 {
                     b.Property<Guid>("Id")
@@ -363,9 +344,6 @@ namespace allSkillBack.Migrations
                     b.Property<Guid?>("PCId1")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("PcBudgetId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid?>("PcOptiId")
                         .HasColumnType("uuid");
 
@@ -380,20 +358,13 @@ namespace allSkillBack.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("WhoClaimedId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
                     b.HasIndex("InternetId");
 
-                    b.HasIndex("PCId")
-                        .IsUnique();
+                    b.HasIndex("PCId");
 
                     b.HasIndex("PCId1");
-
-                    b.HasIndex("PcBudgetId")
-                        .IsUnique();
 
                     b.HasIndex("PcOptiId");
 
@@ -497,18 +468,12 @@ namespace allSkillBack.Migrations
                         .HasForeignKey("InternetId");
 
                     b.HasOne("Api.Models.PC", "PC")
-                        .WithOne()
-                        .HasForeignKey("Api.Models.Ticket", "PCId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .WithMany()
+                        .HasForeignKey("PCId");
 
                     b.HasOne("Api.Models.PC", null)
                         .WithMany("Tickets")
                         .HasForeignKey("PCId1");
-
-                    b.HasOne("Api.Models.PcBudget", "PcBudget")
-                        .WithOne()
-                        .HasForeignKey("Api.Models.Ticket", "PcBudgetId")
-                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Api.Models.PcOpti", "PcOpti")
                         .WithMany()
@@ -517,8 +482,6 @@ namespace allSkillBack.Migrations
                     b.Navigation("Internet");
 
                     b.Navigation("PC");
-
-                    b.Navigation("PcBudget");
 
                     b.Navigation("PcOpti");
                 });

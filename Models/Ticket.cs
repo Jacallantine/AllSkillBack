@@ -9,6 +9,11 @@ namespace Api.Models{
         public int IsComplete{get; set;}
         public int IsClaimed {get; set;}
         public string WhoClaimed {get; set;} = "";
+        public Guid WhoClaimedId {get;set;}
+
+
+        public PcBudget? PcBudget {get; set;}
+        public Guid? PcBudgetId {get; set;}
 
         public PC? PC {get; set;}
         public Guid? PCId {get; set;}

@@ -75,7 +75,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("https://www.allskillnotalk.site" ) 
+        policy.WithOrigins("https://www.allskillnotalk.site", "http://localhost:3000" ) 
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials(); 
@@ -97,6 +97,7 @@ using (var scope = app.Services.CreateScope())
 
 app.MapAuthRoutes();
 app.MapAddCompRoutes();
+app.MapEditCompRoutes();
 
 
 
@@ -152,9 +153,11 @@ app.MapGet("/tickets", [Authorize(Roles = "admin")] async (AppDbContext db) =>
         IsClaimed = t.IsClaimed,
         IsComplete = t.IsComplete,
         WhoClaimed = t.WhoClaimed,
+        WhoClaimedId = t.WhoClaimedId,
         PcOptiId = t.PcOptiId,
         PCId = t.PCId,
         InternetId = t.InternetId,
+        PcBudgetId = t.PcBudgetId,
         Social = t.Social,
         Time = t.Time
 
@@ -162,7 +165,7 @@ app.MapGet("/tickets", [Authorize(Roles = "admin")] async (AppDbContext db) =>
     return Results.Ok(tickets);
 });
 
-app.MapGet("/pc/{id}", [Authorize(Roles = "admin")] async (Guid Id, AppDbContext db)=>{
+app.MapGet("/pc/{id}", async (Guid Id, AppDbContext db)=>{
      var pc = await db.PCs
         .Include(p => p.Cpu)
         .Include(p => p.Gpu)
@@ -178,6 +181,15 @@ app.MapGet("/pc/{id}", [Authorize(Roles = "admin")] async (Guid Id, AppDbContext
         : Results.NotFound("PC with that Id is not found");
 });
 
+app.MapGet("/budget/{id}", async (Guid Id, AppDbContext db)=>{
+     var budget = await db.PcBudget
+        .FirstOrDefaultAsync(p => p.Id == Id);
+
+    return budget is not null 
+        ? Results.Ok(budget) 
+        : Results.NotFound("PC with that Id is not found");
+});
+
 
 app.MapGet("/CustomPc", async (AppDbContext db)=>{
 
@@ -190,6 +202,31 @@ app.MapGet("/CustomPc", async (AppDbContext db)=>{
     var pcCase = await db.Case.AsNoTracking().Where(c => c.IsActive == 1).ToListAsync();
 
     var components = new {ram, gpu, cpu, mobo, psu, storage, pcCase};
+
+    return Results.Ok(components);
+});
+
+app.MapGet("/admin/custompc", [Authorize(Roles = "admin")] async (AppDbContext db)=>{
+
+    var ram = await db.Ram.AsNoTracking().ToListAsync();
+    var gpu = await db.Gpu.AsNoTracking().ToListAsync();
+    var cpu = await db.Cpu.AsNoTracking().ToListAsync();
+    var mobo = await db.Mobo.AsNoTracking().ToListAsync();
+    var psu = await db.Psu.AsNoTracking().ToListAsync();
+    var storage = await db.Storage.AsNoTracking().ToListAsync();
+    var pcCase = await db.Case.AsNoTracking().ToListAsync();
+
+    var components = new {ram, gpu, cpu, mobo, psu, storage, pcCase};
+
+    return Results.Ok(components);
+});
+
+app.MapGet("/admin/services", async (AppDbContext db)=>{
+
+    var internet = await db.Internet.AsNoTracking().Where(t => t.IsActive == 1).ToListAsync();
+    var pcOpti = await db.PcOpti.AsNoTracking().Where(t => t.IsActive == 1). ToListAsync();
+
+    var components = new {internet, pcOpti};
 
     return Results.Ok(components);
 });
@@ -241,6 +278,7 @@ app.MapPost("/tickets/claim", [Authorize(Roles = "admin")] async (TicketIdDto ti
         ticket.IsClaimed = 1;
         ticket.IsComplete = 0;
         ticket.WhoClaimed = ticketDto.FirstName;
+        ticket.WhoClaimedId = ticketDto.WhoClaimedId;
     }
      else
     {
@@ -268,6 +306,7 @@ app.MapPost("/tickets/complete", [Authorize(Roles = "admin")] async (TicketIdDto
         ticket.IsComplete = 1;
         ticket.IsClaimed = 0;
         ticket.WhoClaimed = ticketDto.FirstName;
+        ticket.WhoClaimedId = ticketDto.WhoClaimedId;
     }
     else
     {
@@ -283,6 +322,22 @@ app.MapPost("/tickets/complete", [Authorize(Roles = "admin")] async (TicketIdDto
 app.MapPost("/tickets/create", async (TicketDto ticketDto, AppDbContext db) =>
 {
      PC? pc = null;
+     PcBudget? PcBudget = null;
+
+     if (ticketDto.PcBudget is not null)
+     {
+        PcBudget = new PcBudget
+        {
+        Id = PcBudget.Id,    
+        SpecialRequest = ticketDto.PcBudget.SpecialRequest,
+        Budget = ticketDto.PcBudget.Budget
+        };
+
+        db.PcBudget.Add(PcBudget);
+        await db.SaveChangesAsync();
+        
+
+     };
 
     if (ticketDto.PC is not null)
     {
@@ -310,11 +365,11 @@ app.MapPost("/tickets/create", async (TicketDto ticketDto, AppDbContext db) =>
         IsClaimed = 0,
         WhoClaimed = ticketDto.WhoClaimed,
         PCId = pc?.Id,
+        PcBudgetId = PcBudget?.Id,
         InternetId = ticketDto.InternetId,
         PcOptiId = ticketDto.PcOptiId
     };
 
-    
 
     db.Tickets.Add(ticket);
     
@@ -323,6 +378,77 @@ app.MapPost("/tickets/create", async (TicketDto ticketDto, AppDbContext db) =>
     return Results.Ok("Order Placed!");
     
 });
+
+app.MapPost("/tickets/addbudget", async (TicketDto ticketDto, AppDbContext db) =>
+{
+     PC? pc = null;
+     PcBudget? pcBudget = null;
+
+     if (ticketDto.PcBudget is not null)
+     {
+        pcBudget = new PcBudget
+        {    
+        SpecialRequest = ticketDto.PcBudget.SpecialRequest,
+        Budget = ticketDto.PcBudget.Budget,
+        Social = ticketDto.Social
+        };
+
+        db.PcBudget.Add(pcBudget);
+        await db.SaveChangesAsync();
+        
+
+     };
+
+    if (ticketDto.PC is not null)
+    {
+        pc = new PC
+        {
+            CpuId = ticketDto.PC.CpuId,
+            GpuId = ticketDto.PC.GpuId,
+            RamId = ticketDto.PC.RamId,
+            MoboId = ticketDto.PC.MoboId,
+            PsuId = ticketDto.PC.PsuId,
+            CaseId = ticketDto.PC.CaseId,
+            StorageId = ticketDto.PC.StorageId
+        };
+
+        db.PCs.Add(pc);
+        await db.SaveChangesAsync();
+    }
+      var ticket = new Ticket 
+    {
+        Id= ticketDto.Id,
+        Email = ticketDto.Email,
+        Time = ticketDto.Time,
+        Social = ticketDto.Social,
+        IsComplete = 0,
+        IsClaimed = 0,
+        WhoClaimed = ticketDto.WhoClaimed,
+        WhoClaimedId = ticketDto.WhoClaimedId,
+        PCId = null,
+        PcBudgetId = pcBudget?.Id,
+        InternetId = null,
+        PcOptiId = null
+    };
+
+
+    db.Tickets.Add(ticket);
+    
+    await db.SaveChangesAsync();
+
+    return Results.Ok("Order Placed!");
+    
+});
+
+
+
+
+
+
+
+
+
+    
 
 app.MapPost("/admin/tickets/create", [Authorize(Roles = "admin")] async (TicketDto ticketDto, AppDbContext db) =>
 {

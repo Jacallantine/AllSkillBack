@@ -4,5 +4,6 @@ namespace Api.Models.Dto{
 
         public Guid Id {get; set;} 
         public string FirstName {get; set;}
+        public Guid WhoClaimedId {get; set;}
 }
 }
