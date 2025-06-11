@@ -94,6 +94,24 @@ public static class AddCompRoutes
 
             });
 
+
+            app.MapPost("/addmobo", [Authorize(Roles = "admin")] async (AddMoboDto moboDto, AppDbContext db)=>{
+
+                        var newMobo = new Ram 
+                        {
+                                Id = moboDto.Id,
+                                Price = moboDto.Price,
+                                Name = moboDto.Name,
+                                Url = moboDto.Url,
+                                Type = moboDto.Type
+                        };
+
+                    db.Mobo.Add(newMobo);
+                    await db.SaveChangesAsync();
+                    return Results.Ok(newMobo);
+
+            });
+
                 
 
                      app.MapPost("/addpsu", [Authorize(Roles = "admin")] async (AddPsuDto psuDto, AppDbContext db)=>{
@@ -108,14 +126,21 @@ public static class AddCompRoutes
                                 Watt = psuDto.Watt
                         };
 
-                    db.Psu.Add(newPsu);
-                    await db.SaveChangesAsync();
-                    return Results.Ok(newPsu);
-                    });
+                        db.Psu.Add(newPsu);
+                        await db.SaveChangesAsync();
+                        return Results.Ok(newPsu);
+                        });
+
+
+
 
 
 
             
+                     
+                     
+                     
+                     
                      app.MapPost("/addstorage",  async (AddStorageDto storageDto, AppDbContext db)=>{
 
                         var newStorage = new Storage 
@@ -127,9 +152,10 @@ public static class AddCompRoutes
                                 Type = storageDto.Type 
                         };
 
-                    db.Storage.Add(newStorage);
-                    await db.SaveChangesAsync();
-                    return Results.Ok(newStorage);
+                        db.Storage.Add(newStorage);
+                        await db.SaveChangesAsync();
+                        return Results.Ok(newStorage);
+                    
 
             });
 
