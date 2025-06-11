@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("allSkillBack")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6b3316588231d07b28044a9980046b15335e4a88")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f6f0263d35e6202cb44ca3446218a2d7a0a1f787")]
 [assembly: System.Reflection.AssemblyProductAttribute("allSkillBack")]
 [assembly: System.Reflection.AssemblyTitleAttribute("allSkillBack")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

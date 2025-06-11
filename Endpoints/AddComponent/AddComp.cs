@@ -97,7 +97,7 @@ public static class AddCompRoutes
 
             app.MapPost("/addmobo", [Authorize(Roles = "admin")] async (AddMoboDto moboDto, AppDbContext db)=>{
 
-                        var newMobo = new Ram 
+                        var newMobo = new Mobo 
                         {
                                 Id = moboDto.Id,
                                 Price = moboDto.Price,
